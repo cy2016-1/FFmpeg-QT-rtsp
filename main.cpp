@@ -5,7 +5,6 @@
  * 我的CSDN博客：http://blog.csdn.net/weixin_38215395
  * 联系：QQ1039953685
  */
-
 #include <QApplication>
 #include <QTextCodec>
 

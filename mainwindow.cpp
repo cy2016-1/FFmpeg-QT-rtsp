@@ -4,7 +4,6 @@
  * 我的CSDN博客：http://blog.csdn.net/weixin_38215395
  * 联系：QQ1039953685
  */
-
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -25,9 +24,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
     mPlayer = new VideoPlayer;
     connect(mPlayer,SIGNAL(sig_GetOneFrame(QImage)),this,SLOT(slotGetOneFrame(QImage)));
-    //2017.8.11---lizhen
     connect(mPlayer,SIGNAL(sig_GetRFrame(QImage)),this,SLOT(slotGetRFrame(QImage)));
-    //2017.8.12---lizhen
     connect(ui->Open_red,&QAction::triggered,this,&MainWindow::slotOpenRed);
     connect(ui->Close_Red,&QAction::triggered,this,&MainWindow::slotCloseRed);
 
@@ -61,10 +58,9 @@ void MainWindow::paintEvent(QPaintEvent *event)
     painter.drawImage(QPoint(x,y),img); //画出图像
 
     if(open_red==true){
-    //2017.8.12
     QWidget *red_video=new QWidget(this);
     red_video->resize(this->width()/3,this->height()/3);
-    //2017.8.11---lizhen
+
     //提取出图像中的R数据
     painter.setBrush(Qt::white);
     painter.drawRect(0, 0, red_video->width(),red_video->height()); //先画成白色
@@ -89,7 +85,8 @@ void MainWindow::slotGetOneFrame(QImage img)
     mImage = img;
     update(); //调用update将执行 paintEvent函数
 }
-//2017.10.10，显示二值图像
+
+// 显示二值图像
 QImage Indentificate(QImage image)
 {
 	QSize size = image.size();
@@ -113,22 +110,25 @@ QImage Indentificate(QImage image)
 		}
 	return binaryImage;
 }
+
 //小窗口显示
 void MainWindow::slotGetRFrame(QImage img)
 {
     R_mImage = img;
-	//2017.10.9---在新线程中执行显示二值图像函数
+	// 在新线程中执行显示二值图像函数
 	//QFuture<QImage> future = QtConcurrent::run(Indentificate, mImage);
 	//R_mImage = future.result();
     update(); //调用update将执行 paintEvent函数
 }
-//显示图像红色通道,2017.8.12---lizhen
+
+//显示图像红色通道
 bool MainWindow::slotOpenRed()
 {
     open_red=true;
     return open_red;
 }
-//关闭图像红色通道，2017.8.12
+
+//关闭图像红色通道
 bool MainWindow::slotCloseRed()
 {
     open_red=false;

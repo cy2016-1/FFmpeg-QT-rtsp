@@ -4,7 +4,6 @@
  * 我的CSDN博客：http://blog.csdn.net/weixin_38215395
  * 联系：QQ1039953685
  */
-
 #include "videoplayer.h"
 
 extern "C"
@@ -30,7 +29,7 @@ VideoPlayer::~VideoPlayer()
 
 void VideoPlayer::startPlay()
 {
-    ///调用 QThread 的start函数 将会自动执行下面的run函数 run函数是一个新的线程
+    //调用 QThread 的start函数 将会自动执行下面的run函数 run函数是一个新的线程
     this->start();
 
 }
@@ -49,14 +48,13 @@ void VideoPlayer::run()
     int videoStream, i, numBytes;
     int ret, got_picture;
 
-    avformat_network_init();   ///初始化FFmpeg网络模块，2017.8.5---lizhen
+    avformat_network_init();   ///初始化FFmpeg网络模块
     av_register_all();         //初始化FFMPEG  调用了这个才能正常适用编码器和解码器
 
 
     //Allocate an AVFormatContext.
     pFormatCtx = avformat_alloc_context();
 
-    ///2017.8.5---lizhen
     AVDictionary *avdic=NULL;
     char option_key[]="rtsp_transport";
     char option_value[]="tcp";
@@ -97,7 +95,7 @@ void VideoPlayer::run()
     ///查找解码器
     pCodecCtx = pFormatCtx->streams[videoStream]->codec;
     pCodec = avcodec_find_decoder(pCodecCtx->codec_id);
-    ///2017.8.9---lizhen
+
     pCodecCtx->bit_rate =0;   //初始化为0
     pCodecCtx->time_base.num=1;  //下面两行：一秒钟25帧
     pCodecCtx->time_base.den=10;
@@ -157,7 +155,7 @@ void VideoPlayer::run()
                 QImage tmpImg((uchar *)out_buffer,pCodecCtx->width,pCodecCtx->height,QImage::Format_RGB32);
                 QImage image = tmpImg.copy(); //把图像复制一份 传递给界面显示
                 emit sig_GetOneFrame(image);  //发送信号
-       ///2017.8.11---lizhen
+
                 //提取出图像中的R数据
                 for(int i=0;i<pCodecCtx->width;i++)
                 {
@@ -173,7 +171,6 @@ void VideoPlayer::run()
         }
         av_free_packet(packet); //释放资源,否则内存会一直上升
 
-     ///2017.8.7---lizhen
         msleep(0.02); //停一停  不然放的太快了
     }
     av_free(out_buffer);

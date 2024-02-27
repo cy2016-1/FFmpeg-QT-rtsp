@@ -4,7 +4,6 @@
  * 我的CSDN博客：http://blog.csdn.net/weixin_38215395
  * 联系：QQ1039953685
  */
-
 #ifndef MAINWINDOW_H
 #define MAINWINDOW_H
 
@@ -40,7 +39,7 @@ private:
     VideoPlayer *mPlayer;                  //播放线程
 
     QImage mImage;                         //记录当前的图像
-    QImage R_mImage;                       //2017.8.11---lizhen
+    QImage R_mImage;
 
     QString url; 
 
@@ -48,9 +47,9 @@ private:
 
 private slots:
     void slotGetOneFrame(QImage img);
-    void slotGetRFrame(QImage img);        //2017.8.11---lizhen
-    bool slotOpenRed();                    //2017.8.12---lizhen
-    bool slotCloseRed();                   //2017.8.12
+    void slotGetRFrame(QImage img);
+    bool slotOpenRed();
+    bool slotCloseRed();
 };
 
 #endif // MAINWINDOW_H
